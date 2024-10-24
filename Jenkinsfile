@@ -23,8 +23,16 @@ pipeline {
                 script {
                     def server = Artifactory.server(ARTIFACTORY_ID)
                     def rtMaven = Artifactory.newMavenBuild()
+
+                    // Resolver and Deployer configuration
                     rtMaven.resolver server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
+                    
+                    // **Changes made here**: Enable artifact deployment
+                    rtMaven.deployer.deployArtifacts = true 
+
+                    // Optionally publish build info
+                    server.publishBuildInfo rtMaven.buildInfo()
                 }
             }
         }
