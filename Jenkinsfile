@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        ARTIFACTORY_URL = 'http://13.235.245.221:8081/artifactory'
+        ARTIFACTORY_URL = 'http://35.154.215.87:8081/artifactory'
         ARTIFACTORY_ID = 'Artifactory'
         MAVEN_VERSION = 'Maven3'
         POM_PATH = 'pom.xml'
