@@ -35,6 +35,15 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Artifactory') {
+            steps {
+                script {
+                    def server = Artifactory.server(ARTIFACTORY_ID)
+                    def buildInfo = Artifactory.newBuildInfo()
+                    server.publishBuildInfo buildInfo
+                }
+            }
+        }
     }
     post {
         success {
