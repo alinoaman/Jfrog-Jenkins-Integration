@@ -28,11 +28,8 @@ pipeline {
                     rtMaven.resolver server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     
-                    // **Changes made here**: Enable artifact deployment
+                    // Enable artifact deployment
                     rtMaven.deployer.deployArtifacts = true 
-
-                    // Optionally publish build info
-                    server.publishBuildInfo rtMaven.buildInfo()
                 }
             }
         }
@@ -41,7 +38,11 @@ pipeline {
                 script {
                     // Run the Maven build and deploy the artifacts
                     def rtMaven = Artifactory.newMavenBuild()
-                    rtMaven.run pom: POM_PATH, goals: 'clean install'
+                    def buildInfo = rtMaven.run pom: POM_PATH, goals: 'clean install'
+
+                    // Publish the build info to Artifactory
+                    def server = Artifactory.server(ARTIFACTORY_ID)
+                    server.publishBuildInfo buildInfo
                 }
             }
         }
