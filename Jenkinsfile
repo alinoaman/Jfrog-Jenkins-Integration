@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven3' // Specify the Maven version configured in Jenkins
+        maven 'Maven3'
     }
     environment {
         ARTIFACTORY_URL = 'http://35.154.215.87:8081/artifactory'
@@ -16,30 +16,19 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/techworldwithmurali/web-application-old.git'
             }
         }
-        stage('Artifactory Configuration') {
+        stage('Build and Deploy') {
             steps {
                 script {
                     def server = Artifactory.server(ARTIFACTORY_ID)
                     def rtMaven = Artifactory.newMavenBuild()
+                    def buildInfo = Artifactory.newBuildInfo()
+
+                    rtMaven.tool = 'Maven3'
                     rtMaven.resolver server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
-                    rtMaven.deployer.deployArtifacts = true // Enable artifact deployment
-                }
-            }
-        }
-        stage('Build') {
-            steps {
-                script {
-                    def rtMaven = Artifactory.newMavenBuild()
-                    rtMaven.run pom: POM_PATH, goals: 'clean install'
-                }
-            }
-        }
-        stage('Deploy to Artifactory') {
-            steps {
-                script {
-                    def server = Artifactory.server(ARTIFACTORY_ID)
-                    def buildInfo = Artifactory.newBuildInfo()
+                    rtMaven.deployer.deployArtifacts = true
+
+                    rtMaven.run pom: POM_PATH, goals: 'clean install', buildInfo: buildInfo
                     server.publishBuildInfo buildInfo
                 }
             }
