@@ -7,8 +7,6 @@ pipeline {
         ARTIFACTORY_URL = 'http://35.154.215.87:8081/artifactory'
         ARTIFACTORY_ID = 'Jfrog'
         POM_PATH = 'pom.xml'
-        REPO_RELEASE = 'example-repo-local'
-        REPO_SNAPSHOT = 'New-maven-snapshots'
         VIRTUAL_REPO = 'libs-release'
     }
     stages {
@@ -25,8 +23,8 @@ pipeline {
                     def buildInfo = Artifactory.newBuildInfo()
 
                     rtMaven.tool = 'Maven3'
-                    rtMaven.resolver server: server, releaseRepo: VIRTUAL_REPO, snapshotRepo: REPO_SNAPSHOT
-                    rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
+                    rtMaven.resolver server: server, releaseRepo: VIRTUAL_REPO, snapshotRepo: VIRTUAL_REPO
+                    rtMaven.deployer server: server, releaseRepo: 'example-repo-local1', snapshotRepo: 'New-maven-snapshots'
                     rtMaven.deployer.deployArtifacts = true
 
                     rtMaven.run pom: POM_PATH, goals: 'clean install', buildInfo: buildInfo
