@@ -23,6 +23,7 @@ pipeline {
                     def buildInfo = Artifactory.newBuildInfo()
 
                     rtMaven.tool = 'Maven3'
+                    rtMaven.opts = '-U'
                     rtMaven.resolver server: server, releaseRepo: VIRTUAL_REPO, snapshotRepo: VIRTUAL_REPO
                     rtMaven.deployer server: server, releaseRepo: 'example-repo-local1', snapshotRepo: 'New-maven-snapshots'
                     rtMaven.deployer.deployArtifacts = true
