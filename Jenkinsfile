@@ -9,6 +9,7 @@ pipeline {
         POM_PATH = 'pom.xml'
         REPO_RELEASE = 'example-repo-local'
         REPO_SNAPSHOT = 'New-maven-snapshots'
+        VIRTUAL_REPO = 'libs-release'
     }
     stages {
         stage('Checkout') {
@@ -24,8 +25,7 @@ pipeline {
                     def buildInfo = Artifactory.newBuildInfo()
 
                     rtMaven.tool = 'Maven3'
-                    // Add Maven Central as a resolver
-                    rtMaven.resolver server: server, releaseRepo: 'maven-central', snapshotRepo: REPO_SNAPSHOT
+                    rtMaven.resolver server: server, releaseRepo: VIRTUAL_REPO, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer.deployArtifacts = true
 
