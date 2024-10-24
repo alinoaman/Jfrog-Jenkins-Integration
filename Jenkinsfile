@@ -24,7 +24,8 @@ pipeline {
                     def buildInfo = Artifactory.newBuildInfo()
 
                     rtMaven.tool = 'Maven3'
-                    rtMaven.resolver server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
+                    // Add Maven Central as a resolver
+                    rtMaven.resolver server: server, releaseRepo: 'maven-central', snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer server: server, releaseRepo: REPO_RELEASE, snapshotRepo: REPO_SNAPSHOT
                     rtMaven.deployer.deployArtifacts = true
 
