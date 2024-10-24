@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven3' // Specify the Maven version configured in Jenkins
+    }
     environment {
         ARTIFACTORY_URL = 'http://35.154.215.87:8081/artifactory'
         ARTIFACTORY_ID = 'Jfrog'
