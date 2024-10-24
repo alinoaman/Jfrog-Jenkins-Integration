@@ -1,9 +1,11 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven3' // Specify the Maven version configured in Jenkins
+    }
     environment {
         ARTIFACTORY_URL = 'http://35.154.215.87:8081/artifactory'
         ARTIFACTORY_ID = 'Jfrog'
-        MAVEN_VERSION = 'Maven3'
         POM_PATH = 'pom.xml'
         REPO_RELEASE = 'example-repo-local'
         REPO_SNAPSHOT = 'New-maven-snapshots'
